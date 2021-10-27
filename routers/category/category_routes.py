@@ -4,7 +4,6 @@ from fastapi_jwt_auth.auth_jwt import AuthJWT
 from starlette import status
 from models.category import Category 
 from configs.database import mongodatabase 
-from routers.authentication import oauth2
 from schemas.users_schemas import serializeDict, serializeList
 from bson import ObjectId
 category = APIRouter(

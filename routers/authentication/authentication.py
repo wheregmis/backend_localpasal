@@ -10,7 +10,7 @@ router = APIRouter(tags=['Authentication'])
 
 @router.post('/login')
 def login(loginUser:Login,Authorize:AuthJWT=Depends()):
-    user = serializeDict(mongodatabase.user.find_one({"email":loginUser.username}))
+    user = serializeDict(mongodatabase.user.find_one({"email":loginUser.email}))
     if not user['email']:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Invalid Credentials")
