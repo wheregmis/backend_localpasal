@@ -6,11 +6,13 @@ from routers.authentication.hashing import Hash
 from routers.authentication import token
 from schemas.users_schemas import serializeDict, serializeList
 from bson import ObjectId
+from fastapi_jwt_auth import AuthJWT
+from fastapi_jwt_auth.exceptions import AuthJWTException
 from sqlalchemy.orm import Session
 router = APIRouter(tags=['Authentication'])
 
 @router.post('/login')
-def login(request:OAuth2PasswordRequestForm = Depends()):
+def login(request:OAuth2PasswordRequestForm = Depends(), Authorize: AuthJWT = Depends()):
     user = serializeDict(mongodatabase.user.find_one({"email":request.username}))
     print(request.username)
     print(user)
@@ -23,4 +25,5 @@ def login(request:OAuth2PasswordRequestForm = Depends()):
     
 
     access_token = token.create_access_token(data={"sub": user['email']})
-    return {"access_token": access_token, "token_type": "bearer", "user": user}
+    refresh_token = Authorize.create_refresh_token(subject=user['email'])
+    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer", "user": user}
