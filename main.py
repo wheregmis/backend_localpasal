@@ -2,11 +2,11 @@ from fastapi.routing import APIRoute
 import inspect, re
 from fastapi.openapi.utils import get_openapi
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 from routers.users import user_routes 
 from routers.products import product_routes 
 from routers.category import category_routes 
 from routers.authentication import authentication 
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi_jwt_auth import AuthJWT
 from models.settings import Settings
 
