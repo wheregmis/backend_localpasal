@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends, status, HTTPException
 from fastapi.encoders import jsonable_encoder
 from fastapi_jwt_auth import AuthJWT
 
+from datetime import datetime
+
 from configs.database import mongo_database as mongodatabase
 from localpasal.authentication import Login
 from localpasal.authentication import Hash
@@ -27,9 +29,10 @@ async def login(loginUser: Login, Authorize: AuthJWT = Depends()):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Incorrect password")
     user_info = serializeDict(mongodatabase.user.find_one({"emailAddress": loginUser.email}))
-    access_token = Authorize.create_access_token(subject=user['email'])
+    expires = datetime.timedelta(days=1)
+    access_token = Authorize.create_access_token(subject=user['email'], expires_time=expires)
     refresh_token = Authorize.create_refresh_token(subject=user['email'])
-    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer", "user": user_info}
+    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer", "expires_at": expires, "user": user_info}
 
 
 # refreshing tokens
