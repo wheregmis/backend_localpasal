@@ -1,15 +1,15 @@
-from fastapi.routing import APIRoute
-import inspect, re
-from fastapi.openapi.utils import get_openapi
-from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
-from routers.users import user_routes 
-from routers.products import product_routes 
-from routers.category import category_routes 
-from routers.authentication import authentication 
-from fastapi_jwt_auth import AuthJWT
-from models.settings import Settings
+import inspect
+import re
 
+from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi
+from fastapi.routing import APIRoute
+from fastapi_jwt_auth import AuthJWT
+from starlette.middleware.cors import CORSMiddleware
+
+from configs.settings import Settings
+from localpasal.authentication import authentication_routes
+from localpasal.user import user_routes
 
 app = FastAPI()
 
@@ -78,8 +78,6 @@ app.add_middleware(
 
 # users.Base.metadata.create_all(engine)
 
-app.include_router(authentication.router)
-app.include_router(category_routes.category)
-app.include_router(product_routes.product)
-app.include_router(user_routes.user)
+app.include_router(authentication_routes.router)
+app.include_router(user_routes.router)
 
