@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status, HTTPException
 from fastapi.encoders import jsonable_encoder
 from fastapi_jwt_auth import AuthJWT
 
-from datetime import datetime
+import datetime
 
 from configs.database import mongo_database as mongodatabase
 from localpasal.authentication import Login
