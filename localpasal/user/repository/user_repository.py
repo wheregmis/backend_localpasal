@@ -1,8 +1,5 @@
-# Will work on this for caching in the future
+from configs.database import mongodatabase
 
 
-class UserRepository:
-
-    @classmethod
-    def add_user(cls):
-        pass
+def add_user(data:dict):
+    mongodatabase.user.insert_one(data)

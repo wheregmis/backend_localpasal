@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, status, HTTPException, BackgroundTasks
 from fastapi.encoders import jsonable_encoder
 from fastapi_jwt_auth import AuthJWT
 
 import datetime
 
-from configs.database import mongo_database as mongodatabase
+from configs.database import mongodatabase
 from localpasal.authentication import Login
 from localpasal.authentication import Hash
 from localpasal.global_schemas import serializeDict
@@ -42,6 +42,7 @@ async def refresh_token(Authorize: AuthJWT = Depends()):
     """
     ## Create a fresh token
     This creates a fresh token. It requires an refresh token.
+    Bearer JWTToken
     """
     try:
         Authorize.jwt_refresh_token_required()

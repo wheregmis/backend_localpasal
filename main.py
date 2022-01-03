@@ -10,6 +10,7 @@ from starlette.middleware.cors import CORSMiddleware
 from configs.settings import Settings
 from localpasal.authentication import authentication_routes
 from localpasal.user import user_routes
+from localpasal.category import category_routes
 
 app = FastAPI()
 
@@ -80,4 +81,5 @@ app.add_middleware(
 
 app.include_router(authentication_routes.router)
 app.include_router(user_routes.router)
+app.include_router(category_routes.router)
 

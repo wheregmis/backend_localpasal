@@ -10,4 +10,4 @@ var_mongodb = os.getenv('MONGO_DATABASE')
 
 
 conn = MongoClient(f"mongodb+srv://{var_mongo_user}:{var_mongo_pass}@{var_mongodb}.nf7wz.mongodb.net/{var_mongodb}?retryWrites=true&w=majority")
-mongo_database = conn[var_mongodb]
+mongodatabase = conn[var_mongodb]

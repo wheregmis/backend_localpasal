@@ -1,15 +1,16 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, BackgroundTasks
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from fastapi_jwt_auth.auth_jwt import AuthJWT
 from starlette import status
 
-from configs.database import mongo_database as mongodatabase
+from configs.database import mongodatabase
 from localpasal.global_schemas import serializeDict, serializeList
 from bson import ObjectId
 from ..schemas.user_schemas import SignUpModel
 from localpasal.user import User
 from localpasal.authentication import Hash
+from ..repository.user_repository import add_user
 
 router = APIRouter(
     prefix="/user",
@@ -45,14 +46,14 @@ async def find_one_user(id, Authorize:AuthJWT=Depends()):
 
 
 @router.post('/')
-async def create_user(user: SignUpModel):
+async def create_user(user: SignUpModel, background_tasks: BackgroundTasks):
     user = serializeDict(mongodatabase.authentication.find_one({"email": user.email}))
     if user['email']:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"User Already Exists")
     mongodatabase.authentication.insert_one(dict(SignUpModel(email=user.email, password=Hash.bcrypt(user.password))))
     user_info = serializeDict(mongodatabase.authentication.find_one({"email": user.email}))
-    mongodatabase.user.insert_one(dict(User(emailAddress=user.email)))
+    background_tasks.add_task(add_user(dict(User(emailAddress=user.email))))
     return jsonable_encoder({"user":User(emailAddress=user.email)})
 
 
