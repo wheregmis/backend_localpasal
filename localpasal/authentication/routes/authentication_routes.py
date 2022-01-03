@@ -30,9 +30,11 @@ async def login(loginUser: Login, Authorize: AuthJWT = Depends()):
                             detail=f"Incorrect password")
     user_info = serializeDict(mongodatabase.user.find_one({"emailAddress": loginUser.email}))
     expires = datetime.timedelta(days=1)
+    test = datetime.datetime.now() + datetime.timedelta(days=1)
+    expire_timestamp = (datetime.datetime.timestamp(test))
     access_token = Authorize.create_access_token(subject=user['email'], expires_time=expires)
     refresh_token = Authorize.create_refresh_token(subject=user['email'])
-    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer", "expires_at": expires, "user": user_info}
+    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer", "expires_at": expire_timestamp, "user": user_info}
 
 
 # refreshing tokens
