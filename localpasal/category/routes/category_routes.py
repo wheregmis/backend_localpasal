@@ -17,16 +17,7 @@ router = APIRouter(
 
 
 @router.get('/')
-async def find_all_categories(Authorize:AuthJWT=Depends()):
-    try:
-        Authorize.jwt_required()
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid Token"
-        )
-    print(Authorize.get_jwt_subject())
+async def find_all_categories():
     return serializeList(mongodatabase.category.find())
 
 
