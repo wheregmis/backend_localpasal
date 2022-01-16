@@ -23,15 +23,7 @@ async def find_all_products():
 
 
 @router.get('/{id}')
-async def find_one_product(id, Authorize:AuthJWT=Depends()):
-    try:
-        Authorize.jwt_required()
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid Token"
-        )
+async def find_one_product(id):
     return serializeDict(mongodatabase.product.find_one({"_id":ObjectId(id)}))
 
 
