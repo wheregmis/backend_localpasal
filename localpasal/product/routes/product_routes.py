@@ -36,6 +36,7 @@ async def create_product(product: Product, Authorize: AuthJWT=Depends()):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid Token"
         )
+    print("Testing CICD")
     product_id = mongodatabase.product.insert_one(dict(product)).inserted_id
     return serializeDict(mongodatabase.product.find_one({"_id":ObjectId(product_id)}))
 
